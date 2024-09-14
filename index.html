@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="css/all.min.css" />
+    <script src="js/all.min.js"></script>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="./css/bootstrap.min.css" />
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <!-- axios -->
+    <!-- <script src="node_modules/axios/dist/axios.min.js"></script> -->
+    <script src="js/axios.min.js"></script>
+    <!-- google fonts <Roboto> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="./favicon.png" type="image/x-icon" />
+    <!-- main style.css -->
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Prayer Times</title>
+  </head>
+  <body>
+    <div id="app">
+      <div id="background-img"></div>
+      <div class="container">
+        <div class="dates">
+          <div class="header-section">
+            <p class="gregorian-date">August 10, 2024</p>
+          </div>
+          <div class="header-section">
+            <p class="hijri-date">Safar 6, 1446 AH</p>
+          </div>
+        </div>
+        <div class="center-screen">
+          <div class="actual-time">
+            <span class="period"></span>
+            <span class="hours lg"></span><span class="minutes lg"></span
+            ><span class="seconds"></span>
+          </div>
+          <div class="ayah">
+            <div class="text">
+              <i onclick="copyAyah()" class="fa-regular copy-ayah fa-copy"></i>
+              <p class="ayah-text"></p>
+            </div>
+            <div class="surah"></div>
+          </div>
+          <div class="btn btn-primary get-location d-none">
+            Get Your Location
+          </div>
+          <div class="prayer-times">
+            <i class="fa-solid mosque-icon fa-mosque"></i>
+            <div class="prayer">
+              <div class="prayer-data"></div>
+              <div class="prayer-remaining"></div>
+              <span class="before"></span>
+            </div>
+            <div class="prayer">
+              <div class="prayer-data"></div>
+              <div class="prayer-remaining"></div>
+              <span class="before"></span>
+            </div>
+            <div class="prayer">
+              <div class="prayer-data"></div>
+              <div class="prayer-remaining"></div>
+              <span class="before"></span>
+            </div>
+            <div class="prayer">
+              <div class="prayer-data"></div>
+              <div class="prayer-remaining"></div>
+              <span class="before"></span>
+            </div>
+            <div class="prayer">
+              <div class="prayer-data"></div>
+              <div class="prayer-remaining"></div>
+              <span class="before"></span>
+            </div>
+            <div class="prayer">
+              <div class="prayer-data"></div>
+              <div class="prayer-remaining"></div>
+              <span class="before"></span>
+            </div>
+          </div>
+        </div>
+        <div class="setting-container">
+          <i onclick="showSetting()" class="set-icon fa-solid fa-gear"></i>
+          <div class="d-none" id="later">
+            <ul class="nav-setting">
+              <li class="prayer-setting">prayer settings</li>
+              <li class="bg-setting">background settings</li>
+              <li class="ayah-setting">Ayah settings</li>
+            </ul>
+            <div class="main-setting">
+              <!-- prayer times -->
+              <div class="d-none" id="prayer-setting">
+                <div class="setting">
+                  <label for="country">country:</label>
+                  <select
+                    onchange="getCities()"
+                    class=""
+                    name="country"
+                    id="country"
+                  >
+                    <!-- <option value="any">Select your city</option> -->
+                  </select>
+                  <span class="separator"></span>
+                  <i class="fa-solid fa-angle-up icon-up"></i>
+                </div>
+                <div class="setting">
+                  <label for="city">city:</label>
+                  <select
+                    onchange="getPrayerTimes()"
+                    class=""
+                    name="city"
+                    id="city"
+                  >
+                    <!-- <option value="any">Select your city</option> -->
+                  </select>
+                  <span class="separator"></span>
+                  <i class="fa-solid fa-angle-up icon-up"></i>
+                </div>
+                <div class="setting">
+                  <label for="methods">methods:</label>
+                  <select
+                    onchange="setMethod()"
+                    class=""
+                    name="methods"
+                    id="methods"
+                  ></select>
+                  <span class="separator"></span>
+                  <i class="fa-solid fa-angle-up icon-up"></i>
+                </div>
+              </div>
+              <!-- background -->
+              <div class="d-none" id="bg-setting">
+                <!-- switch between bg-img and bg-color -->
+                <div class="setting">
+                  <div class="show-bg form-switch p-0">
+                    <label class="form-check-label" for="show-bg"
+                      >show background</label
+                    >
+                    <input
+                      onchange="setShowBackground()"
+                      class="form-check-input ms-5"
+                      type="checkbox"
+                      role="switch"
+                      id="show-bg"
+                      checked
+                    />
+                  </div>
+                </div>
+                <!-- bg randomize  -->
+                <!-- <div class="setting">
+                  <div class="random form-switch p-0">
+                    <label class="form-check-label" for="random"
+                      >auto change backround</label
+                    >
+                    <input
+                      class="form-check-input ms-5"
+                      type="checkbox"
+                      role="switch"
+                      id="random"
+                    />
+                  </div>
+                </div> -->
+                <!-- next bg -->
+                <div class="setting">
+                  <div class="bg-next form-switch p-0">
+                    <label class="bg-next-label">Load New Background</label>
+                    <i
+                      class="fa-solid fa-rotate icon-rotate"
+                      onclick="nextBackground()"
+                    ></i>
+                  </div>
+                </div>
+                <!-- blur -->
+                <div class="setting">
+                  <div class="blur form-switch p-0">
+                    <label class="form-check-label" for="blur"
+                      >Enable Blur Effect</label
+                    >
+                    <input
+                      class="form-check-input ms-5"
+                      type="checkbox"
+                      role="switch"
+                      id="blur"
+                      onchange="setShowBackground()"
+                    />
+                  </div>
+                </div>
+                <!-- bg-color -->
+                <div class="setting">
+                  <div class="bg-color form-switch p-0">
+                    <label class="form-check-label" for="bg-color"
+                      >Selected Solid Color</label
+                    >
+
+                    <input
+                      class="form-check-input ms-5"
+                      type="color"
+                      role="switch"
+                      id="bg-color"
+                      onchange="setShowBackground()"
+                      value="#2a2a2a"
+                    />
+                  </div>
+                </div>
+              </div>
+              <!-- ayah settings -->
+              <div class="d-none" id="ayah-setting">
+                <div class="setting">
+                  <div class="show-ayah form-switch p-0">
+                    <label class="form-check-label" for="show-ayah"
+                      >show ayah</label
+                    >
+                    <input
+                      class="form-check-input ms-5"
+                      type="checkbox"
+                      role="switch"
+                      id="show-ayah"
+                      onclick="setShowAyah()"
+                    />
+                  </div>
+                </div>
+                <div class="setting">
+                  <div class="random form-switch p-0">
+                    <label class="form-check-label" for="random"
+                      >Random Display</label
+                    >
+                    <!-- <input
+                      class="form-check-input ms-5"
+                      type="checkbox"
+                      role="switch"
+                      id="random"
+                      onclick="getRandomAyah()"
+                    /> -->
+                    <i
+                      class="fa-solid fa-rotate icon-rotate"
+                      onclick="getRandomAyah()"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div onclick="showSetting()" class="layer d-none"></div>
+      <div class="alert alert-success opacity-0" role="alert">Copied !</div>
+    </div>
+  </body>
+
+  <!-- main script -->
+  <script src="./js/Elements.js"></script>
+  <script src="./js/script.js"></script>
+</html>
